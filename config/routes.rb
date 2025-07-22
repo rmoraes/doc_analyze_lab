@@ -7,4 +7,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  post "document_analyzers/extract", to: "document_analyzers#extract"
+  post "document_analyzers/check", to: "document_analyzers#check"
 end

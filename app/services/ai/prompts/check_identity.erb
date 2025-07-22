@@ -1,0 +1,10 @@
+Analyze the document (image or PDF) and extract visible values directly from the image.
+
+Compare these values (ignore case, accents, and minor name differences):
+<%= expected_values_formatted %>
+
+Document type must match "<%= expected_type %>".
+
+Return `true` only if all values are semantically close and type matches. Else, `false`.
+
+Respond with only `true` or `false`.

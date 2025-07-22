@@ -1,0 +1,25 @@
+Analyze the document (image or PDF) and extract visible values directly from the image.
+
+Do not reuse or guess based on the expected values below:
+<%= expected_values_formatted %>
+
+Confirm the document_type is "<%= expected_type %>".
+
+Return only JSON in this format:
+{
+  "approved": true,
+  "document_type": "...",
+  "matches": [
+    {
+      "value": "...",         # value from image
+      "matched": true/false,  # true if semantically close to expected
+      "confidence": 0.0-1.0   # based on visibility in image
+    }
+  ]
+}
+
+Use `"value": null`, `"matched": false`, `"confidence": 0` if not found or unclear.
+
+`approved` is `true` only if all values match and type is correct.
+
+Respond with JSON only.
