@@ -3,12 +3,12 @@ class DocumentAnalyzersController < ApplicationController
   before_action :load_document_params
 
    def extract
-    prompt = AI::Prompts::Base.load("check_extract_identity", {
+    prompt = AI::Prompts::Template.load("extract_identity_prompt", {
       expected_type: @expected_type,
       expected_values: @expected_values
     })
 
-    result = DocumentAnalyzerService.new(:openai).extract(@image_path, prompt)
+    result = AI::Service.new(provider: :openai).extract(prompt, @image_path)
 
     render json: {
       approved: result['approved'],
@@ -27,12 +27,12 @@ class DocumentAnalyzersController < ApplicationController
 
 
   def check
-    prompt = AI::Prompts::Base.load("check_identity", {
+    prompt = AI::Prompts::Template.load("check_identity_prompt", {
       expected_type: @expected_type,
       expected_values: @expected_values
     })
 
-    result = DocumentAnalyzerService.new(:openai).check?(@image_path, prompt)
+    result = AI::Service.new(provider: :openai).check?(prompt, @image_path)
 
     render json: result
   end
@@ -40,12 +40,8 @@ class DocumentAnalyzersController < ApplicationController
   private
 
   def load_document_params
-    @image_path = "..."
-    @expected_type = "..."
-    @expected_values = [
-      "name...",
-      "cpf...",
-      "rg...."
-    ]
+    @image_path = ""
+    @expected_type = ""
+    @expected_values = [""]
   end
 end
