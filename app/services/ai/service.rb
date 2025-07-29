@@ -1,5 +1,7 @@
 module AI
   class Service
+    attr_reader :provider
+
     def initialize(provider:)
       @provider = provider.to_sym
     end

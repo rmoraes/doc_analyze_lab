@@ -2,15 +2,14 @@ module AI
   module Providers
     module OpenAI
       class ApiClient
-        API_KEY = ENV.fetch("OPENAI_API_KEY") { raise "Missing OPENAI_API_KEY" }
+        def initialize(api_key: ENV["OPENAI_API_KEY"])
+          raise "Missing OPENAI_API_KEY" if api_key.nil? || api_key.strip.empty?
 
-        HEADERS = {
-          "Authorization" => "Bearer #{API_KEY}",
-          "Content-Type" => "application/json"
-        }.freeze
+          @api_key = api_key
+        end
 
         def post(url, payload)
-          response = RestClient.post(url, payload, HEADERS)
+          response = RestClient.post(url, payload, headers)
           parse_response(response)
         rescue RestClient::ExceptionWithResponse => e
           handle_http_error(e)
@@ -35,6 +34,13 @@ module AI
         end
 
         private
+
+        def headers
+          {
+            "Authorization" => "Bearer #{@api_key}",
+            "Content-Type" => "application/json"
+          }
+        end
 
         def image_data_url(file_path)
           "data:image/jpeg;base64,#{Base64.strict_encode64(File.binread(file_path))}"
